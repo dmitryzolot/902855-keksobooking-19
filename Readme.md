@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Dmitry Zolot](https://up.htmlacademy.ru/javascript/19/user/902855).
-* Наставник: `Неизвестно`.
+* Наставник: `Руслан Бреев`.
 
 ---
 
