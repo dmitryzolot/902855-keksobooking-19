@@ -1,27 +1,46 @@
 'use strict';
 
+var TITLES = ['Комната', 'Студия', 'Квартира', 'Apartments'];
+var TYPES = ['palace', 'flat', 'house', 'bungalo'];
+var ROOMS_NUMBER = [1, 2, 3];
+var GUESTS_NUMBER = [1, 2, 0];
+var CHECKINS = ['12:00', '13:00', '14:00'];
+var CHECKOUTS = ['12:00', '13:00', '14:00'];
+var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var DESCRIPTIONS = ['некий текст, некий текст'];
+var PHOTOES = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+var MIN_Y = 130;
+var MAX_Y = 630;
+var PIN_WIDTH = 62;
+var PIN_HEIGHT = 84;
+
 var mapBlock = document.querySelector('.map');
 var mapBlockWidth = mapBlock.offsetWidth;
 
-function getArrayRandomElement(arr) {
-  var rand = Math.floor(Math.random() * arr.length);
-  return arr[rand];
+//  Добавляем в переменную контейнер для пинов
+var mapPins = document.querySelector('.map__pins');
+
+//  Добавляем в переменную template пинов
+var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+
+function getRandomElement(array) {
+  var random = Math.floor(Math.random() * array.length);
+  return array[random];
 }
 
-function randomInteger(min, max) {
+function getRandomInteger(min, max) {
   // случайное число от min до max
-  var rand = min + Math.random() * (max - min);
-  return Math.floor(rand);
+  return Math.floor(min + Math.random() * (max - min));
 }
 
 
-function generateUserIDNumber(length) {
-  var userIDs = [];
+function generateImagePath(length) {
+  var imagePathes = [];
 
   for (var i = 0; i <= length; i++) {
-    userIDs.push('img/avatars/user0' + i + '.png');
+    imagePathes.push('img/avatars/user0' + i + '.png');
   }
-  return userIDs;
+  return imagePathes;
 }
 
 function generateAuthorNamesArray(length) {
@@ -37,8 +56,8 @@ function generateAuthorNamesArray(length) {
 
 function getRandomRound100Integer(min, max) {
   // случайное число от min до (max+1), округленное до сотен
-  var rand = min + Math.random() * (max + 1 - min);
-  return Math.round(Math.floor(rand) / 100) * 100;
+  var random = min + Math.random() * (max + 1 - min);
+  return Math.round(Math.floor(random) / 100) * 100;
 }
 
 function generatePricesArray(length, min, max) {
@@ -53,8 +72,8 @@ function generatePricesArray(length, min, max) {
 
 function generateLocation(minX, maxX, minY, maxY) {
   var location = {};
-  location.x = randomInteger(minX, maxX);
-  location.y = randomInteger(minY, maxY);
+  location.x = getRandomInteger(minX, maxX);
+  location.y = getRandomInteger(minY, maxY);
 
   return location;
 }
@@ -63,76 +82,30 @@ function generateLocation(minX, maxX, minY, maxY) {
 function generateLocationsArray(length) {
   var locations = [];
   for (var i = 1; i <= length; i++) {
-    locations.push(generateLocation(0, mapBlockWidth, 130, 630));
+    locations.push(generateLocation(0, mapBlockWidth, MIN_Y, MAX_Y));
   }
   return locations;
 }
 
 
-var locationsArray = generateLocationsArray(8);
-
-
 function generateAddressesArray(length) {
   var addresses = [];
   for (var i = 1; i <= length; i++) {
-    addresses.push('строка' + generateLocation(0, mapBlockWidth, 130, 630));
+    addresses.push(generateLocation(0, mapBlockWidth, MIN_Y, MAX_Y));
   }
   return addresses;
 }
 
-console.log(generateAddressesArray(8));
-
-// function generateLocationsArray(length, minX, maxX, minY, maxY) {
-//   var locationsArray = [];
-
-//   for (var i = 1; i <= length; i++) {
-//     var location = {};
-//     locationsArray.push(randomInteger(minX, maxX), randomInteger(minY, maxY));
-
-//     for (var i = 1; i <= length; i++) {
-//       location.push(randomInteger(minX, maxX), randomInteger(minY, maxY));
-//     }
-
-//     return location;
-
-//   }
-
-//   return locationsArray;
-
-// }
-
-// console.log(generateLocationsArray(3, 0, mapBlockWidth, 130, 630));
-
-
-var AVATARS = generateUserIDNumber(8);
-var AUTHORS_NAMES = generateAuthorNamesArray(8);
-
-var TITLES = ['Комната', 'Студия', 'Квартира', 'Apartments'];
-var ADDRESSES = generateAddressesArray(8);
-var PRICES = generatePricesArray(8, 5000, 100000);
-var TYPES = ['palace', 'flat', 'house', 'bungalo'];
-var ROOMS_NUMBER = [1, 2, 3];
-var GUESTS_NUMBER = [1, 2, 0];
-var CHECKINS = ['12:00', '13:00', '14:00'];
-var CHECKOUTS = ['12:00', '13:00', '14:00'];
-var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var DESCRIPTIONS = ['некий текст, некий текст'];
-var PHOTOES = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-
-var LOCATIONS = locationsArray;
+// console.log(generateAddressesArray(8));
 
 
 mapBlock.classList.remove('map--faded');
 
-// AVATARS.forEach(function (item, i, AVATARS) {
-//   console.log(AVATARS[i]);
-//   // перебирает все элементы массива AVATARS
-// });
 
 function generateAuthor(authorName, authorAvatar, i) {
   var author = {};
 
-  author.name = getArrayRandomElement(authorName);
+  author.name = getRandomElement(authorName);
   author.avatar = authorAvatar[i];
 
   return author;
@@ -143,28 +116,34 @@ function generateAuthor(authorName, authorAvatar, i) {
 function generateAuthorsArray(length) {
   var authors = [];
   for (var i = 1; i <= length; i++) {
-    authors.push(generateAuthor(AUTHORS_NAMES, AVATARS, i));
+    authors.push(generateAuthor(authorsNames, avatars, i));
   }
   return authors;
 }
+
+var avatars = generateImagePath(8);
+var authorsNames = generateAuthorNamesArray(8);
+var addressesArray = generateAddressesArray(8);
+var prices = generatePricesArray(8, 5000, 100000);
+var locationsArray = generateLocationsArray(8);
 
 var authorsArray = generateAuthorsArray(8);
 
 var generateAnnouncement = function (announcementAuthor, announcementTitle, announcementAddress, announcementPrice, announcementType, announcementRoomsNumber, announcementGuestsNumber, announcementCheckin, announcementCheckout, announcementFeatures, announcementDescription, announcementPhoto, announcementLocation) {
   var announcement = {};
-  announcement.author = getArrayRandomElement(announcementAuthor);
-  announcement.title = getArrayRandomElement(announcementTitle);
-  announcement.address = getArrayRandomElement(announcementAddress);
-  announcement.price = getArrayRandomElement(announcementPrice);
-  announcement.type = getArrayRandomElement(announcementType);
-  announcement.roomsNumber = getArrayRandomElement(announcementRoomsNumber);
-  announcement.guestsNumber = getArrayRandomElement(announcementGuestsNumber);
-  announcement.checkin = getArrayRandomElement(announcementCheckin);
-  announcement.checkout = getArrayRandomElement(announcementCheckout);
-  announcement.features = getArrayRandomElement(announcementFeatures);
-  announcement.description = getArrayRandomElement(announcementDescription);
-  announcement.photo = getArrayRandomElement(announcementPhoto);
-  announcement.location = getArrayRandomElement(announcementLocation);
+  announcement.author = getRandomElement(announcementAuthor);
+  announcement.title = getRandomElement(announcementTitle);
+  announcement.address = getRandomElement(announcementAddress);
+  announcement.price = getRandomElement(announcementPrice);
+  announcement.type = getRandomElement(announcementType);
+  announcement.roomsNumber = getRandomElement(announcementRoomsNumber);
+  announcement.guestsNumber = getRandomElement(announcementGuestsNumber);
+  announcement.checkin = getRandomElement(announcementCheckin);
+  announcement.checkout = getRandomElement(announcementCheckout);
+  announcement.features = getRandomElement(announcementFeatures);
+  announcement.description = getRandomElement(announcementDescription);
+  announcement.photo = getRandomElement(announcementPhoto);
+  announcement.location = getRandomElement(announcementLocation);
 
   return announcement;
 };
@@ -174,10 +153,40 @@ function generateAnnouncementsArray(length) {
   var announcements = [];
 
   for (var i = 1; i <= length; i++) {
-    announcements.push(generateAnnouncement(authorsArray, TITLES, ADDRESSES, PRICES, TYPES, ROOMS_NUMBER, GUESTS_NUMBER, CHECKINS, CHECKOUTS, FEATURES, DESCRIPTIONS, PHOTOES, LOCATIONS));
+    announcements.push(generateAnnouncement(authorsArray, TITLES, addressesArray, prices, TYPES, ROOMS_NUMBER, GUESTS_NUMBER, CHECKINS, CHECKOUTS, FEATURES, DESCRIPTIONS, PHOTOES, locationsArray));
   }
   return announcements;
 }
 var announcements = generateAnnouncementsArray(8);
 
-console.log(announcements);
+// console.log(announcements);
+
+
+var createTemplatePin = function (announcementObject) {
+  var pinElement = pinTemplate.cloneNode(true);
+
+  pinElement.style.left = announcementObject.location.x - PIN_WIDTH / 2 + 'px';
+  pinElement.style.top = announcementObject.location.y - PIN_HEIGHT + 'px';
+
+
+  pinElement.querySelector('img').src = announcementObject.author.avatar; pinElement.querySelector('img').alt = announcementObject.announcementTitle;
+
+  return pinElement;
+};
+
+// Функция добавления пинов в контейнер
+var renderAnnouncements = function () {
+  // Создаем фрагмент
+  var fragment = document.createDocumentFragment();
+
+  // Вызываем функцию добавления свойств объектов в элементы шаблона и записываем её в фрагмент
+  for (var i = 0; i < announcements.length; i++) {
+    // Добавляем фрагмент на карту
+    mapPins.appendChild(fragment);
+
+    fragment.appendChild(createTemplatePin(announcements[i]));
+  }
+};
+
+// Передаём свойства объектов в функцию добавления пинов на карту
+renderAnnouncements();
