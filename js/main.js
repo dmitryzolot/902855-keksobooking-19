@@ -23,6 +23,9 @@ var mapPins = document.querySelector('.map__pins');
 //  Добавляем в переменную template пинов
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
+// Добавляем в переменную template карточки
+var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+
 function getRandomElement(array) {
   var random = Math.floor(Math.random() * array.length);
   return array[random];
@@ -121,6 +124,17 @@ function generateAuthorsArray(length) {
   return authors;
 }
 
+function generateFeaturesArray(array) {
+  var featuresArray = [];
+  var length = Math.floor(Math.random() * array.length);
+  for (var i = 1; i <= length; i++) {
+    featuresArray.push(array[i]);
+  }
+  return featuresArray;
+}
+
+// console.log(generateFeaturesArray(FEATURES));
+
 var avatars = generateImagePath(8);
 var authorsNames = generateAuthorNamesArray(8);
 var addressesArray = generateAddressesArray(8);
@@ -140,7 +154,7 @@ var generateAnnouncement = function (announcementAuthor, announcementTitle, anno
   announcement.guestsNumber = getRandomElement(announcementGuestsNumber);
   announcement.checkin = getRandomElement(announcementCheckin);
   announcement.checkout = getRandomElement(announcementCheckout);
-  announcement.features = getRandomElement(announcementFeatures);
+  announcement.features = generateFeaturesArray(announcementFeatures);
   announcement.description = getRandomElement(announcementDescription);
   announcement.photo = getRandomElement(announcementPhoto);
   announcement.location = getRandomElement(announcementLocation);
@@ -190,3 +204,68 @@ var renderAnnouncements = function () {
 
 // Передаём свойства объектов в функцию добавления пинов на карту
 renderAnnouncements();
+
+
+// Создаём функцию написания количества комнат и гостей
+var getTextRoom = function (rooms, guests) {
+  if (guests > 1) {
+    var textGuest = guests + ' гостей';
+  } else {
+    textGuest = guests + ' гостя';
+  }
+
+  if (rooms > 1) {
+    var textRoom = rooms + ' комнаты для ' + textGuest;
+  } else {
+    textRoom = rooms + ' комната для ' + textGuest;
+  }
+  return textRoom;
+};
+
+
+// Создаём функцию добавления свойств карточки в разметку
+var createTemplateCard = function (announcement) {
+  var cardElement = cardTemplate.cloneNode(true);
+
+  cardElement.querySelector('.popup__title').textContent = announcement.title;
+  cardElement.querySelector('.popup__text--address').textContent = announcement.address;
+  cardElement.querySelector('.popup__text--price').textContent = announcement.price + 'руб/ночь';
+  cardElement.querySelector('.popup__type').textContent = announcement.type;
+  cardElement.querySelector('.popup__text--capacity').textContent = getTextRoom(announcement.roomsNumber, announcement.guestsNumber);
+  cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + announcement.checkin + ', ' + 'выезд до ' + announcement.checkout;
+
+
+  var featuresList = cardElement.querySelector('.popup__features');
+
+  featuresList.innerHTML = '<ul class="popup__features"></ul>';
+
+  // Добавляем в очищенный список случайное количество features
+  var addFeatures = function (tagName, firstClassName, secondClassName) {
+    var featureElement = document.createElement(tagName);
+    featureElement.classList.add(firstClassName);
+    featureElement.classList.add(secondClassName);
+    return featureElement;
+  };
+
+
+  for (var i = 0; i <= announcement.features.length - 1; i++) {
+    featuresList.appendChild(addFeatures('li', 'popup__feature', 'popup__feature--' + announcement.features[i]));
+  }
+
+
+  cardElement.querySelector('.popup__description ').textContent = announcement.description;
+  cardElement.querySelector('.popup__photos').querySelector('img').src = announcement.photos;
+  cardElement.querySelector('.popup__avatar').src = announcement.author.avatar;
+
+  return cardElement;
+};
+
+// Функция добавления карточек на карту перед "map__filters-container"
+var renderCard = function (announcementData) {
+  var fragment = document.createDocumentFragment();
+  var mapFilters = document.querySelector('.map__filters-container');
+  fragment.appendChild(createTemplateCard(announcementData));
+  mapBlock.insertBefore(fragment, mapFilters);
+};
+
+renderCard(generateAnnouncement(authorsArray, TITLES, addressesArray, prices, TYPES, ROOMS_NUMBER, GUESTS_NUMBER, CHECKINS, CHECKOUTS, FEATURES, DESCRIPTIONS, PHOTOES, locationsArray));
