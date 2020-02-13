@@ -16,6 +16,22 @@ var MAX_Y = 630;
 var PIN_WIDTH = 62;
 var PIN_HEIGHT = 84;
 
+var ROOMS_MAP = {
+  1: ['0', '2', '3'],
+  2: ['0', '3'],
+  3: ['0'],
+  100: ['1', '2', '3']
+};
+var guestsSelect = document.querySelector('#capacity');
+var roomsSelect = document.querySelector('#room_number');
+var setRestrictions = function () {
+  var currentRestrictions = ROOMS_MAP[roomsSelect.value];
+  var guestOptions = guestsSelect.options;
+  [].forEach.call(guestOptions, function (option) {
+    option.disabled = !(currentRestrictions.indexOf(option.value) === -1);
+  });
+};
+
 var mapBlock = document.querySelector('.map');
 var mapBlockWidth = mapBlock.offsetWidth;
 
@@ -26,36 +42,20 @@ var mainPin = document.querySelector('.map__pin--main');
 
 var mainForm = document.querySelector('.ad-form');
 
-var roomNumberForm = document.getElementById('room_number');
-var guestNumberForm = document.getElementById('capacity');
+var formFieldsets = document.querySelectorAll('.ad-form__element');
 
-// Устанавливаем начальное значение количества гостей
-guestNumberForm.innerHTML = '<option value="1">для 1 гостя</option>';
 
-// Создаём обработчик изменения количества комнат
-var setGuestsNumberHandler = function () {
-  var elementIndex = roomNumberForm.selectedIndex;
-
-  if (elementIndex === 0) {
-    guestNumberForm.innerHTML = '<option value="1">для 1 гостя</option>';
-  }
-
-  if (elementIndex === 1) {
-    guestNumberForm.innerHTML = '<option value="2">для 2 гостей</option><option value="1">для 1 гостя</option>';
-  }
-
-  if (elementIndex === 2) {
-    guestNumberForm.innerHTML = '<option value="3" selected>для 3 гостей</option><option value="2">для 2 гостей</option><option value="1">для 1 гостя</option>';
-  }
-
-  if (elementIndex === 3) {
-    guestNumberForm.innerHTML = '<option value="0">не для гостей</option>';
-  }
-};
-
-roomNumberForm.addEventListener('change', function () {
-  setGuestsNumberHandler();
+formFieldsets.forEach(function (filter) {
+  filter.setAttribute('disabled', 'disabled');
 });
+
+guestsSelect.value = roomsSelect.value;
+
+setRestrictions();
+
+
+// нужный обработчик
+roomsSelect.addEventListener('change', setRestrictions);
 
 //  Добавляем в переменную контейнер для пинов
 var mapPins = document.querySelector('.map__pins');
@@ -77,6 +77,9 @@ mapCheckboxes.forEach(function (checkbox) {
 
 mainPin.addEventListener('mousedown', function (evt) {
   if (evt.which === 1) {
+    formFieldsets.forEach(function (filter) {
+      filter.removeAttribute('disabled', 'disabled');
+    });
     mapFilters.forEach(function (filter) {
       filter.removeAttribute('disabled', 'disabled');
     });
@@ -90,6 +93,9 @@ mainPin.addEventListener('mousedown', function (evt) {
 
 mainPin.addEventListener('keydown', function (evt) {
   if (evt.key === ENTER_KEY) {
+    formFieldsets.forEach(function (filter) {
+      filter.removeAttribute('disabled', 'disabled');
+    });
     mapFilters.forEach(function (filter) {
       filter.removeAttribute('disabled', 'disabled');
     });
