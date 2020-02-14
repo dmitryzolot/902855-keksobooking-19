@@ -1,5 +1,7 @@
 'use strict';
 
+var ENTER_KEY = 'Enter';
+
 var TITLES = ['Комната', 'Студия', 'Квартира', 'Apartments'];
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var ROOMS_NUMBER = [1, 2, 3];
@@ -14,8 +16,46 @@ var MAX_Y = 630;
 var PIN_WIDTH = 62;
 var PIN_HEIGHT = 84;
 
+var ROOMS_MAP = {
+  1: ['0', '2', '3'],
+  2: ['0', '3'],
+  3: ['0'],
+  100: ['1', '2', '3']
+};
+var guestsSelect = document.querySelector('#capacity');
+var roomsSelect = document.querySelector('#room_number');
+var setRestrictions = function () {
+  var currentRestrictions = ROOMS_MAP[roomsSelect.value];
+  var guestOptions = guestsSelect.options;
+  [].forEach.call(guestOptions, function (option) {
+    option.disabled = !(currentRestrictions.indexOf(option.value) === -1);
+  });
+};
+
 var mapBlock = document.querySelector('.map');
 var mapBlockWidth = mapBlock.offsetWidth;
+
+var mapFilters = document.querySelectorAll('.map__filter');
+var mapCheckboxes = document.querySelectorAll('.map__checkbox');
+
+var mainPin = document.querySelector('.map__pin--main');
+
+var mainForm = document.querySelector('.ad-form');
+
+var formFieldsets = document.querySelectorAll('.ad-form__element');
+
+
+formFieldsets.forEach(function (filter) {
+  filter.setAttribute('disabled', 'disabled');
+});
+
+guestsSelect.value = roomsSelect.value;
+
+setRestrictions();
+
+
+// нужный обработчик
+roomsSelect.addEventListener('change', setRestrictions);
 
 //  Добавляем в переменную контейнер для пинов
 var mapPins = document.querySelector('.map__pins');
@@ -25,6 +65,47 @@ var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pi
 
 // Добавляем в переменную template карточки
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+
+mapFilters.forEach(function (filter) {
+  filter.setAttribute('disabled', 'disabled');
+});
+
+mapCheckboxes.forEach(function (checkbox) {
+  checkbox.setAttribute('disabled', 'disabled');
+});
+
+
+mainPin.addEventListener('mousedown', function (evt) {
+  if (evt.which === 1) {
+    formFieldsets.forEach(function (filter) {
+      filter.removeAttribute('disabled', 'disabled');
+    });
+    mapFilters.forEach(function (filter) {
+      filter.removeAttribute('disabled', 'disabled');
+    });
+    mapCheckboxes.forEach(function (checkbox) {
+      checkbox.removeAttribute('disabled', 'disabled');
+    });
+    mapBlock.classList.remove('map--faded');
+    mainForm.classList.remove('ad-form--disabled');
+  }
+});
+
+mainPin.addEventListener('keydown', function (evt) {
+  if (evt.key === ENTER_KEY) {
+    formFieldsets.forEach(function (filter) {
+      filter.removeAttribute('disabled', 'disabled');
+    });
+    mapFilters.forEach(function (filter) {
+      filter.removeAttribute('disabled', 'disabled');
+    });
+    mapCheckboxes.forEach(function (checkbox) {
+      checkbox.removeAttribute('disabled', 'disabled');
+    });
+    mapBlock.classList.remove('map--faded');
+    mainForm.classList.remove('ad-form--disabled');
+  }
+});
 
 function getRandomElement(array) {
   var random = Math.floor(Math.random() * array.length);
@@ -100,9 +181,6 @@ function generateAddressesArray(length) {
 }
 
 // console.log(generateAddressesArray(8));
-
-
-mapBlock.classList.remove('map--faded');
 
 
 function generateAuthor(authorName, authorAvatar, i) {
@@ -203,7 +281,7 @@ var renderAnnouncements = function () {
 };
 
 // Передаём свойства объектов в функцию добавления пинов на карту
-renderAnnouncements();
+// renderAnnouncements();
 
 
 // Создаём функцию написания количества комнат и гостей
@@ -223,49 +301,49 @@ var getTextRoom = function (rooms, guests) {
 };
 
 
-// Создаём функцию добавления свойств карточки в разметку
-var createTemplateCard = function (announcement) {
-  var cardElement = cardTemplate.cloneNode(true);
+// // Создаём функцию добавления свойств карточки в разметку
+// var createTemplateCard = function (announcement) {
+//   var cardElement = cardTemplate.cloneNode(true);
 
-  cardElement.querySelector('.popup__title').textContent = announcement.title;
-  cardElement.querySelector('.popup__text--address').textContent = announcement.address;
-  cardElement.querySelector('.popup__text--price').textContent = announcement.price + 'руб/ночь';
-  cardElement.querySelector('.popup__type').textContent = announcement.type;
-  cardElement.querySelector('.popup__text--capacity').textContent = getTextRoom(announcement.roomsNumber, announcement.guestsNumber);
-  cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + announcement.checkin + ', ' + 'выезд до ' + announcement.checkout;
-
-
-  var featuresList = cardElement.querySelector('.popup__features');
-
-  featuresList.innerHTML = '<ul class="popup__features"></ul>';
-
-  // Добавляем в очищенный список случайное количество features
-  var addFeatures = function (tagName, firstClassName, secondClassName) {
-    var featureElement = document.createElement(tagName);
-    featureElement.classList.add(firstClassName);
-    featureElement.classList.add(secondClassName);
-    return featureElement;
-  };
+//   cardElement.querySelector('.popup__title').textContent = announcement.title;
+//   cardElement.querySelector('.popup__text--address').textContent = announcement.address;
+//   cardElement.querySelector('.popup__text--price').textContent = announcement.price + 'руб/ночь';
+//   cardElement.querySelector('.popup__type').textContent = announcement.type;
+//   cardElement.querySelector('.popup__text--capacity').textContent = getTextRoom(announcement.roomsNumber, announcement.guestsNumber);
+//   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + announcement.checkin + ', ' + 'выезд до ' + announcement.checkout;
 
 
-  for (var i = 0; i <= announcement.features.length - 1; i++) {
-    featuresList.appendChild(addFeatures('li', 'popup__feature', 'popup__feature--' + announcement.features[i]));
-  }
+//   var featuresList = cardElement.querySelector('.popup__features');
+
+//   featuresList.innerHTML = '<ul class="popup__features"></ul>';
+
+//   // Добавляем в очищенный список случайное количество features
+//   var addFeatures = function (tagName, firstClassName, secondClassName) {
+//     var featureElement = document.createElement(tagName);
+//     featureElement.classList.add(firstClassName);
+//     featureElement.classList.add(secondClassName);
+//     return featureElement;
+//   };
 
 
-  cardElement.querySelector('.popup__description ').textContent = announcement.description;
-  cardElement.querySelector('.popup__photos').querySelector('img').src = announcement.photos;
-  cardElement.querySelector('.popup__avatar').src = announcement.author.avatar;
+//   for (var i = 0; i <= announcement.features.length - 1; i++) {
+//     featuresList.appendChild(addFeatures('li', 'popup__feature', 'popup__feature--' + announcement.features[i]));
+//   }
 
-  return cardElement;
-};
 
-// Функция добавления карточек на карту перед "map__filters-container"
-var renderCard = function (announcementData) {
-  var fragment = document.createDocumentFragment();
-  var mapFilters = document.querySelector('.map__filters-container');
-  fragment.appendChild(createTemplateCard(announcementData));
-  mapBlock.insertBefore(fragment, mapFilters);
-};
+//   cardElement.querySelector('.popup__description ').textContent = announcement.description;
+//   cardElement.querySelector('.popup__photos').querySelector('img').src = announcement.photos;
+//   cardElement.querySelector('.popup__avatar').src = announcement.author.avatar;
 
-renderCard(generateAnnouncement(authorsArray, TITLES, addressesArray, prices, TYPES, ROOMS_NUMBER, GUESTS_NUMBER, CHECKINS, CHECKOUTS, FEATURES, DESCRIPTIONS, PHOTOES, locationsArray));
+//   return cardElement;
+// };
+
+// // Функция добавления карточек на карту перед "map__filters-container"
+// var renderCard = function (announcementData) {
+//   var fragment = document.createDocumentFragment();
+//   var mapFilters = document.querySelector('.map__filters-container');
+//   fragment.appendChild(createTemplateCard(announcementData));
+//   mapBlock.insertBefore(fragment, mapFilters);
+// };
+
+// renderCard(generateAnnouncement(authorsArray, TITLES, addressesArray, prices, TYPES, ROOMS_NUMBER, GUESTS_NUMBER, CHECKINS, CHECKOUTS, FEATURES, DESCRIPTIONS, PHOTOES, locationsArray));
