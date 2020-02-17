@@ -11,7 +11,7 @@ var CHECKINS = ['12:00', '13:00', '14:00'];
 var CHECKOUTS = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var DESCRIPTIONS = ['некий текст, некий текст'];
-var PHOTOES = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var MIN_Y = 130;
 var MAX_Y = 630;
 var PIN_WIDTH = 62;
@@ -23,6 +23,14 @@ var ROOMS_MAP = {
   3: ['0'],
   100: ['1', '2', '3']
 };
+
+var PROPERTY_TYPES_MAP = {
+  bungalo: '0',
+  flat: '1000',
+  house: '5000',
+  palace: '10000'
+};
+
 var guestsSelect = document.querySelector('#capacity');
 var roomsSelect = document.querySelector('#room_number');
 var setRestrictions = function () {
@@ -104,21 +112,7 @@ var selectType = document.querySelector('#type');
 var priceField = document.querySelector('#price');
 
 selectType.addEventListener('change', function () {
-  if (selectType.value === 'bungalo') {
-    priceField.min = priceField.placeholder = 0;
-  }
-
-  if (selectType.value === 'flat') {
-    priceField.min = priceField.placeholder = 1000;
-  }
-
-  if (selectType.value === 'house') {
-    priceField.min = priceField.placeholder = 5000;
-  }
-
-  if (selectType.value === 'palace') {
-    priceField.min = priceField.placeholder = 10000;
-  }
+  priceField.min = priceField.placeholder = PROPERTY_TYPES_MAP[selectType.value];
 });
 
 // var mapPin = document.querySelector('.map__pin');
@@ -141,39 +135,31 @@ mapCheckboxes.forEach(function (checkbox) {
 });
 
 
+var activatePage = function () {
+  formFieldsets.forEach(function (filter) {
+    filter.removeAttribute('disabled', 'disabled');
+  });
+  mapOptionFilters.forEach(function (filter) {
+    filter.removeAttribute('disabled', 'disabled');
+  });
+  mapCheckboxes.forEach(function (checkbox) {
+    checkbox.removeAttribute('disabled', 'disabled');
+  });
+  mapBlock.classList.remove('map--faded');
+  mainForm.classList.remove('ad-form--disabled');
+  // Передаём свойства объектов в функцию добавления пинов на карту
+  renderAnnouncements();
+};
+
 mainPin.addEventListener('mousedown', function (evt) {
   if (evt.which === 1) {
-    formFieldsets.forEach(function (filter) {
-      filter.removeAttribute('disabled', 'disabled');
-    });
-    mapOptionFilters.forEach(function (filter) {
-      filter.removeAttribute('disabled', 'disabled');
-    });
-    mapCheckboxes.forEach(function (checkbox) {
-      checkbox.removeAttribute('disabled', 'disabled');
-    });
-    mapBlock.classList.remove('map--faded');
-    mainForm.classList.remove('ad-form--disabled');
-    // Передаём свойства объектов в функцию добавления пинов на карту
-    renderAnnouncements();
+    activatePage();
   }
 });
 
 mainPin.addEventListener('keydown', function (evt) {
   if (evt.key === ENTER_KEY) {
-    formFieldsets.forEach(function (filter) {
-      filter.removeAttribute('disabled', 'disabled');
-    });
-    mapOptionFilters.forEach(function (filter) {
-      filter.removeAttribute('disabled', 'disabled');
-    });
-    mapCheckboxes.forEach(function (checkbox) {
-      checkbox.removeAttribute('disabled', 'disabled');
-    });
-    mapBlock.classList.remove('map--faded');
-    mainForm.classList.remove('ad-form--disabled');
-    // Передаём свойства объектов в функцию добавления пинов на карту
-    renderAnnouncements();
+    activatePage();
   }
 });
 
@@ -304,7 +290,7 @@ var generateAnnouncement = function (announcementAuthor, announcementTitle, anno
   announcement.checkout = getRandomElement(announcementCheckout);
   announcement.features = generateFeaturesArray(announcementFeatures);
   announcement.description = getRandomElement(announcementDescription);
-  announcement.photo = getRandomElement(announcementPhoto);
+  announcement.photos = getRandomElement(announcementPhoto);
   announcement.location = getRandomElement(announcementLocation);
 
   return announcement;
@@ -315,7 +301,7 @@ function generateAnnouncementsArray(length) {
   var announcements = [];
 
   for (var i = 1; i <= length; i++) {
-    announcements.push(generateAnnouncement(authorsArray, TITLES, addressesArray, prices, TYPES, ROOMS_NUMBER, GUESTS_NUMBER, CHECKINS, CHECKOUTS, FEATURES, DESCRIPTIONS, PHOTOES, locationsArray));
+    announcements.push(generateAnnouncement(authorsArray, TITLES, addressesArray, prices, TYPES, ROOMS_NUMBER, GUESTS_NUMBER, CHECKINS, CHECKOUTS, FEATURES, DESCRIPTIONS, PHOTOS, locationsArray));
   }
   return announcements;
 }
@@ -333,15 +319,16 @@ var createTemplatePin = function (announcementObject) {
 
   pinElement.querySelector('img').src = announcementObject.author.avatar; pinElement.querySelector('img').alt = announcementObject.announcementTitle;
 
-  pinElement.addEventListener('mousedown', function (evt) {
+  pinElement.addEventListener('click', function (evt) {
+    var popupElement = document.querySelector('.popup');
     if (evt.target.classList.contains('map__pin--main')) {
       return;
     }
-
-    if (evt.which === 1) {
+    if (mapBlock.contains(popupElement)) {
       removeCard();
-      renderCard(announcementObject);
     }
+    renderCard(announcementObject);
+
   });
 
   pinElement.addEventListener('keydown', function (evt) {
@@ -405,9 +392,8 @@ var createTemplateCard = function (announcement) {
 
 
   cardElement.querySelector('.popup__description ').textContent = announcement.description;
-  cardElement.querySelector('.popup__photos').querySelector('img').src = announcement.photos;
+  cardElement.querySelector('.popup__photos img').src = announcement.photos;
   cardElement.querySelector('.popup__avatar').src = announcement.author.avatar;
-
   // Закрытие попапа
   var popupClose = cardElement.querySelector('.popup__close');
   popupClose.addEventListener('click', removeCard);
@@ -420,6 +406,7 @@ var createTemplateCard = function (announcement) {
   return cardElement;
 };
 
+
 // Функция добавления карточек на карту перед "map__filters-container"
 var renderCard = function (announcementData) {
   var fragment = document.createDocumentFragment();
@@ -428,5 +415,5 @@ var renderCard = function (announcementData) {
   mapBlock.insertBefore(fragment, mapFilters);
 };
 
-// renderCard(generateAnnouncement(authorsArray, TITLES, addressesArray, prices, TYPES, ROOMS_NUMBER, GUESTS_NUMBER, CHECKINS, CHECKOUTS, FEATURES, DESCRIPTIONS, PHOTOES, locationsArray));
+// renderCard(generateAnnouncement(authorsArray, TITLES, addressesArray, prices, TYPES, ROOMS_NUMBER, GUESTS_NUMBER, CHECKINS, CHECKOUTS, FEATURES, DESCRIPTIONS, PHOTOS, locationsArray));
 
