@@ -29,7 +29,8 @@
     mapBlock.classList.remove('map--faded');
     mainForm.classList.remove('ad-form--disabled');
     // Передаём свойства объектов в функцию добавления пинов на карту
-    window.renderAnnouncements();
+    window.backend.fetchData(window.renderAnnouncements);
+
   };
 
   mainPin.addEventListener('mousedown', function (evt) {

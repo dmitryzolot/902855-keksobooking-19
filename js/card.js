@@ -56,9 +56,9 @@
     };
 
 
-    for (var i = 0; i <= announcementObject.features.length - 1; i++) {
-      featuresList.appendChild(addFeatures('li', 'popup__feature', 'popup__feature--' + announcementObject.features[i]));
-    }
+    // for (var i = 0; i <= announcementObject.features.length - 1; i++) {
+    //   featuresList.appendChild(addFeatures('li', 'popup__feature', 'popup__feature--' + announcementObject.features[i]));
+    // }
 
 
     cardElement.querySelector('.popup__description ').textContent = announcementObject.description;
