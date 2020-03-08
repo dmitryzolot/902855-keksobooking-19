@@ -107,16 +107,18 @@
     return pinElement;
   };
 
-  window.renderAnnouncements = function () {
+  window.renderAnnouncements = function (serverData) {
+
+
     // Создаем фрагмент
     var fragment = document.createDocumentFragment();
 
     // Вызываем функцию добавления свойств объектов в элементы шаблона и записываем её в фрагмент
-    for (var i = 0; i < window.data.announcements.length; i++) {
+    for (var i = 0; i < 5; i++) {
       // Добавляем фрагмент на карту
       mapPins.appendChild(fragment);
 
-      fragment.appendChild(createTemplatePin(window.data.announcements[i]));
+      fragment.appendChild(createTemplatePin(serverData[i]));
     }
   };
 
