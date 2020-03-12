@@ -18,8 +18,8 @@
     window.backend.fetchData(window.pins.renderPins, function () {});
 
     // Удаляем обработчики событий
-    mainPin.removeEventListener('keydown', mainPinKeyDownHandler);
-    mainPin.removeEventListener('mousedown', mainPinMouseDownHandler);
+    // mainPin.removeEventListener('keydown', mainPinKeyDownHandler);
+    // mainPin.removeEventListener('mousedown', mainPinMouseDownHandler);
   };
 
 
