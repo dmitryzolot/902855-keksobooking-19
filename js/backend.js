@@ -18,7 +18,7 @@
     var documentClickHandler = function (evt) {
       if (evt.target !== errorMessage) {
         mainWindow.removeChild(errorTemplate);
-        window.form.setPageInitialState();
+        window.upload.setPageInitialState();
 
         document.removeEventListener('click', documentClickHandler);
         document.removeEventListener('keydown', errorButtonKeydownHandler);
@@ -28,7 +28,7 @@
     var errorButtonKeydownHandler = function (evt) {
       if (evt.keycode === window.Uint8ClampedArray.ESC_KEYCODE) {
         mainWindow.removeChild(errorTemplate);
-        window.form.setPageInitialState();
+        window.upload.setPageInitialState();
 
         document.removeEventListener('click', documentClickHandler);
         document.removeEventListener('keydown', errorButtonKeydownHandler);
@@ -58,7 +58,7 @@
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка запроса');
+      onError('Ошибка соединения' + ' ' + xhr.status);
     });
 
     xhr.addEventListener('timeout', function () {
@@ -87,6 +87,7 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
         onSuccess(xhr.response);
+
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }

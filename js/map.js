@@ -33,16 +33,18 @@
 
   };
 
-  mainPin.addEventListener('mousedown', function (evt) {
-    if (evt.which === 1) {
-      activatePage();
-    }
-  });
+  // mainPin.addEventListener('mousedown', function (evt) {
+  //   if (evt.which === 1) {
+  //     activatePage();
+  //   }
+  // });
 
   mainPin.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.util.ENTER_KEYCODE) {
       activatePage();
     }
   });
+
+  window.activatePage = activatePage;
 
 })();
