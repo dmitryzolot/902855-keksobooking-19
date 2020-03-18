@@ -107,14 +107,17 @@
     return pinElement;
   };
 
+  window.offersArray = [];
+
   window.renderAnnouncements = function (serverData) {
 
+    window.offersArray = serverData;
 
     // Создаем фрагмент
     var fragment = document.createDocumentFragment();
 
     // Вызываем функцию добавления свойств объектов в элементы шаблона и записываем её в фрагмент
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 6; i++) {
       // Добавляем фрагмент на карту
       mapPins.appendChild(fragment);
 
