@@ -162,7 +162,6 @@
 
   // return announcements;
 
-  window.offersArray = [];
 
   window.data = {
     announcement: generateAnnouncement(authorsArray, TITLES, addressesArray, prices, TYPES, ROOMS_NUMBER, GUESTS_NUMBER, CHECKINS, CHECKOUTS, FEATURES, DESCRIPTIONS, PHOTOS, locationsArray),

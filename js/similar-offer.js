@@ -41,7 +41,7 @@
     // Добавление и удаление карточки по клику на пин
     pinElement.addEventListener('click', function () {
       tryRemoveCard();
-      window.popup.renderCard(offerObject);
+      window.card.renderCard(offerObject);
     });
 
     return pinElement;

@@ -21,14 +21,13 @@
   var guestsFilter = mapFiltersForm.querySelector('#housing-guests');
   var featuresFilter = mapFiltersForm.querySelector('#housing-features');
 
-  // Массив для отфильтрованных данных
-  var filteredOffers = [];
-
 
   // Функция сравнения типа жилья элемента с выбранным в форме
   var checkOfferType = function (element) {
     return element.offer.type === typeFilter.value ? true : typeFilter.value === 'any';
   };
+
+
 
 
   // Функция сравнения цены жилья
@@ -77,6 +76,41 @@
     });
   };
 
+  // Массив для отфильтрованных данных
+
+
+// var filterData = function(filterArray, callBack) {
+// var filteredOffers = [];
+//   for (var item of filterArray) {
+//     if (callBack(item)) {
+//        filteredOffers.push(item);
+//        console.log(filteredOffers);
+
+//        if (filteredOffers.length === PINS_LIMIT) {
+//          break;
+//        }
+//     }
+    
+//     return filteredOffers;
+
+//   }
+// }
+
+var filteredOffers = [];
+var filterData = function(filterArray, callBack) {
+  var filteredOffers = [];
+  for (var item of filterArray) {
+    if (callBack(item)) {
+      filteredOffers.push(item);
+      console.log(filteredOffers);
+      if (filteredOffers.length === PINS_LIMIT) {
+        break;
+      }
+    }
+  }
+  
+  return filteredOffers;
+}
 
   // Обработчик события изменения формы
   var formChangeHandler = window.debounce.setInterval(function () {
@@ -90,11 +124,17 @@
     window.similarOffer.tryRemoveCard();
 
     // Фильтрация массива
-    filteredOffers = window.offersArray.filter(checkOfferType).filter(checkOfferPrice).filter(checkOfferRooms).filter(checkOfferGuests).filter(checkOfferFeatures);
+    // filteredOffers = window.offersArray.filter(checkOfferType).filter(checkOfferPrice).filter(checkOfferRooms).filter(checkOfferGuests).filter(checkOfferFeatures);
+    // filterData(window.offersArray, checkOfferType) && filterData(window.offersArray, checkOfferPrice) && filterData(window.offersArray, checkOfferRooms) && filterData(window.offersArray, checkOfferGuests) && filterData(window.offersArray, checkOfferFeatures);
+
 
     // Отрисовка соотвтетсвующих пинов
-    window.similarOffer.renderPins(filteredOffers.slice(0, PINS_LIMIT));
+    // window.similarOffer.renderPins(filterData(window.offersArray, checkOfferType)&& filterData(window.offersArray, checkOfferPrice) && filterData(window.offersArray, checkOfferRooms) && filterData(window.offersArray, checkOfferGuests) && filterData(window.offersArray, checkOfferFeatures));
+
+    window.similarOffer.renderPins(filterData(filterData(filterData(filterData(filterData(window.offersArray, checkOfferType), checkOfferPrice), checkOfferRooms), checkOfferGuests), checkOfferFeatures));
   });
+
+ 
 
   // Обработчик изменения формы
   mapFiltersForm.addEventListener('change', formChangeHandler);
@@ -105,6 +145,6 @@
   };
 
   // Вызов функции добавления пинов в контейнер
-  window.filter.formChangeHandler();
+  // window.filter.formChangeHandler();
 
 })();

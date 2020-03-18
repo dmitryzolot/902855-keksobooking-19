@@ -107,8 +107,11 @@
     return pinElement;
   };
 
+  window.offersArray = [];
+
   window.renderAnnouncements = function (serverData) {
 
+    window.offersArray = serverData;
 
     // Создаем фрагмент
     var fragment = document.createDocumentFragment();
