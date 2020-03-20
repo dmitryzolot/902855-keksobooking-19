@@ -72,18 +72,12 @@
     });
 
 
-    // for (var i = 0; i <= announcementObject.features.length - 1; i++) {
-    //   featuresList.appendChild(addFeatures('li', 'popup__feature', 'popup__feature--' + announcementObject.features[i]));
-    // }
-
-
     cardElement.querySelector('.popup__description ').textContent = announcementObject.description;
     var photosContainer = cardElement.querySelector('.popup__photos');
     photosContainer.innerHTML = '';
     announcementObject.offer.photos.forEach(function (photo) {
       photosContainer.appendChild(addPhotos('img', photo, 'popup__photo', '45', '40,', 'Фотография жилья'));
     });
-    // cardElement.querySelector('.popup__photos img').src = announcementObject.offer.photos;
     cardElement.querySelector('.popup__avatar').src = announcementObject.author.avatar;
     // Закрытие попапа
     var popupClose = cardElement.querySelector('.popup__close');
@@ -93,19 +87,9 @@
         removeCard();
       }
     });
-    // console.log(cardElement);
     return cardElement;
 
   };
-
-  // // Функция добавления карточек на карту перед "map__filters-container"
-  // var renderCard = function (announcementData) {
-  //   var fragment = document.createDocumentFragment();
-  //   var mapFilters = document.querySelector('.map__filters-container');
-  //   fragment.appendChild(createTemplateCard(announcementData));
-  //   mapBlock.insertBefore(fragment, mapFilters);
-  // };
-
 
   window.card = {
     renderCard: function (announcementData) {

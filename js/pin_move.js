@@ -1,7 +1,5 @@
 'use strict';
 
-/* eslint-enable */
-
 (function () {
 
   var mainPin = document.querySelector('.map__pin--main');
@@ -126,20 +124,5 @@
     setAddressValue: setAddressValue,
     getPinTipCoords: getPinTipCoords
   };
-
-
-  //   var mainPinMouseDownHandler = function () {
-
-
-  //     // Устанавливаем координаты кончика пина при нажатии на него
-  //     var pinTipInitialCoords = {
-  //       x: window.pinMove.pinInitialCoords.X + Math.floor(window.pinMove.pinSize.WIDTH / 2),
-  //       y: window.pinMove.pinInitialCoords.Y + window.pinMove.pinSize.HEIGTH + window.pinMove.MAIN_PIN_TIP_HEIGHT
-  //     };
-
-  //     window.pinMove.setAddressValue(pinTipInitialCoords.x, pinTipInitialCoords.y);
-  //   };
-
-  //   mainPinMouseDownHandler();
 
 })();
