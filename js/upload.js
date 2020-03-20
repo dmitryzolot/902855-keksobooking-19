@@ -2,9 +2,7 @@
 
 (function () {
 
-  var mapBlock = document.querySelector('.map');
   var mainPin = document.querySelector('.map__pin--main');
-  var mapPin = document.querySelector('.map__pin');
   var uploadMap = document.querySelector('.map');
   var mainForm = document.querySelector('.ad-form');
   var formFieldsets = document.querySelectorAll('.ad-form__element');
@@ -18,17 +16,6 @@
   // Элементы input, select, textarea на которых будет добавляться и удаляться атрибут disabled
   var mapFiltersElements = mapFiltersForm.elements;
   var adFormElements = adForm.elements;
-
-  // Функция добавляения и удаления атрибута disabled на элементах
-  var addDisabledAttribute = function (elements, isDisabled) {
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].disabled = isDisabled;
-    }
-  };
-
-  // // Добавление по умолчанию атрибута disabled
-  // addDisabledAttribute(mapFiltersElements, true);
-  // addDisabledAttribute(adFormElements, true);
 
 
   // Отображение и скрытие сообщения об отправке формы
@@ -76,17 +63,9 @@
     uploadMap.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
 
-    // // // Блокировка формы
-    // addDisabledAttribute(window.upload.mapFiltersElements, true);
-    // addDisabledAttribute(window.upload.adFormElements, true);
-
     // Установка метки в начальное положение
     mainPin.style.left = window.pinMove.pinInitialCoords.X + 'px';
     mainPin.style.top = window.pinMove.pinInitialCoords.Y + 'px';
-
-    // // Возвращение обработчиков событий на главный пин
-    // window.mainPin.addEventListener('keydown', window.window.mainPin.mainpinHandler);
-    // window.mainPin.addEventListener('mousedown', window.window.mainPin.mainpinHandler);
 
     // Удаление пинов (кроме главного пина)
     document.querySelectorAll('.map__pin:not(.map__pin--main)').forEach(function (element) {
@@ -103,12 +82,6 @@
     mapFiltersForm.reset();
     adForm.reset();
 
-    // // Удаление превью аватара и фото жилья
-    // window.image.avatarPreview.src = 'img/muffin-grey.svg';
-    // window.image.offerPreview.style.background = '';
-
-    // // Установка в форму адреса начальных координат центра метки
-    // window.shift.setAddressValue(window.shift.pinCenterInitialCoords.x, window.shift.pinCenterInitialCoords.y);
   };
 
 
@@ -129,7 +102,6 @@
     adForm: adForm,
     mapFiltersElements: mapFiltersElements,
     adFormElements: adFormElements,
-    // addDisabledAttribute: addDisabledAttribute,
     setPageInitialState: setPageInitialState
   };
 

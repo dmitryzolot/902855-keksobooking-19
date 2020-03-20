@@ -75,41 +75,6 @@
   };
 
   // Массив для отфильтрованных данных
-
-
-  // var filterData = function(filterArray, callBack) {
-  // var filteredOffers = [];
-  //   for (var item of filterArray) {
-  //     if (callBack(item)) {
-  //        filteredOffers.push(item);
-  //        console.log(filteredOffers);
-
-  //        if (filteredOffers.length === PINS_LIMIT) {
-  //          break;
-  //        }
-  //     }
-
-  //     return filteredOffers;
-
-  //   }
-  // }
-
-  // var filteredOffers = [];
-  // var filterData = function(filterArray, callBack) {
-  //   var filteredOffers = [];
-  //   for (var item of filterArray) {
-  //     if (callBack(item)) {
-  //       filteredOffers.push(item);
-  //       console.log(filteredOffers);
-  //       if (filteredOffers.length === PINS_LIMIT) {
-  //         break;
-  //       }
-  //     }
-  //   }
-
-  //   return filteredOffers;
-  // }
-
   var filterData = function (filterArray, filteredOffers, callBack) {
     for (var i = 0; i < filterArray.length; i++) {
       if (callBack(filterArray[i])) {
@@ -134,14 +99,6 @@
     window.similarOffer.tryRemoveCard();
 
     // Фильтрация массива
-    // filteredOffers = window.offersArray.filter(checkOfferType).filter(checkOfferPrice).filter(checkOfferRooms).filter(checkOfferGuests).filter(checkOfferFeatures);
-    // filterData(window.offersArray, checkOfferType) && filterData(window.offersArray, checkOfferPrice) && filterData(window.offersArray, checkOfferRooms) && filterData(window.offersArray, checkOfferGuests) && filterData(window.offersArray, checkOfferFeatures);
-
-
-    // Отрисовка соотвтетсвующих пинов
-    // window.similarOffer.renderPins(filterData(window.offersArray, checkOfferType)&& filterData(window.offersArray, checkOfferPrice) && filterData(window.offersArray, checkOfferRooms) && filterData(window.offersArray, checkOfferGuests) && filterData(window.offersArray, checkOfferFeatures));
-
-    // window.similarOffer.renderPins(filterData(window.offersArray, [], checkOfferType));
     window.similarOffer.renderPins(filterData(filterData(filterData(filterData(filterData(window.offersArray, [], checkOfferType), [], checkOfferPrice), [], checkOfferRooms), [], checkOfferGuests), [], checkOfferFeatures));
   });
 
@@ -153,8 +110,5 @@
   window.filter = {
     formChangeHandler: formChangeHandler
   };
-
-  // Вызов функции добавления пинов в контейнер
-  // window.filter.formChangeHandler();
 
 })();

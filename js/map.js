@@ -3,7 +3,6 @@
 (function () {
 
   var mapBlock = document.querySelector('.map');
-  var mapBlockWidth = mapBlock.offsetWidth;
   var formFieldsets = document.querySelectorAll('.ad-form__element');
   var mainForm = document.querySelector('.ad-form');
 
@@ -32,12 +31,6 @@
     window.backend.fetchData(window.renderAnnouncements);
 
   };
-
-  // mainPin.addEventListener('mousedown', function (evt) {
-  //   if (evt.which === 1) {
-  //     activatePage();
-  //   }
-  // });
 
   mainPin.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.util.ENTER_KEYCODE) {
