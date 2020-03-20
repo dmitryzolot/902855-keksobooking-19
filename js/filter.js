@@ -28,8 +28,6 @@
   };
 
 
-
-
   // Функция сравнения цены жилья
   var checkOfferPrice = function (element) {
     if (priceFilter.value === 'any') {
@@ -79,38 +77,50 @@
   // Массив для отфильтрованных данных
 
 
-// var filterData = function(filterArray, callBack) {
-// var filteredOffers = [];
-//   for (var item of filterArray) {
-//     if (callBack(item)) {
-//        filteredOffers.push(item);
-//        console.log(filteredOffers);
+  // var filterData = function(filterArray, callBack) {
+  // var filteredOffers = [];
+  //   for (var item of filterArray) {
+  //     if (callBack(item)) {
+  //        filteredOffers.push(item);
+  //        console.log(filteredOffers);
 
-//        if (filteredOffers.length === PINS_LIMIT) {
-//          break;
-//        }
-//     }
-    
-//     return filteredOffers;
+  //        if (filteredOffers.length === PINS_LIMIT) {
+  //          break;
+  //        }
+  //     }
 
-//   }
-// }
+  //     return filteredOffers;
 
-var filteredOffers = [];
-var filterData = function(filterArray, callBack) {
-  var filteredOffers = [];
-  for (var item of filterArray) {
-    if (callBack(item)) {
-      filteredOffers.push(item);
-      console.log(filteredOffers);
+  //   }
+  // }
+
+  // var filteredOffers = [];
+  // var filterData = function(filterArray, callBack) {
+  //   var filteredOffers = [];
+  //   for (var item of filterArray) {
+  //     if (callBack(item)) {
+  //       filteredOffers.push(item);
+  //       console.log(filteredOffers);
+  //       if (filteredOffers.length === PINS_LIMIT) {
+  //         break;
+  //       }
+  //     }
+  //   }
+
+  //   return filteredOffers;
+  // }
+
+  var filterData = function (filterArray, filteredOffers, callBack) {
+    for (var i = 0; i < filterArray.length; i++) {
+      if (callBack(filterArray[i])) {
+        filteredOffers.push(filterArray[i]);
+      }
       if (filteredOffers.length === PINS_LIMIT) {
         break;
       }
     }
-  }
-  
-  return filteredOffers;
-}
+    return filteredOffers;
+  };
 
   // Обработчик события изменения формы
   var formChangeHandler = window.debounce.setInterval(function () {
@@ -131,10 +141,10 @@ var filterData = function(filterArray, callBack) {
     // Отрисовка соотвтетсвующих пинов
     // window.similarOffer.renderPins(filterData(window.offersArray, checkOfferType)&& filterData(window.offersArray, checkOfferPrice) && filterData(window.offersArray, checkOfferRooms) && filterData(window.offersArray, checkOfferGuests) && filterData(window.offersArray, checkOfferFeatures));
 
-    window.similarOffer.renderPins(filterData(filterData(filterData(filterData(filterData(window.offersArray, checkOfferType), checkOfferPrice), checkOfferRooms), checkOfferGuests), checkOfferFeatures));
+    // window.similarOffer.renderPins(filterData(window.offersArray, [], checkOfferType));
+    window.similarOffer.renderPins(filterData(filterData(filterData(filterData(filterData(window.offersArray, [], checkOfferType), [], checkOfferPrice), [], checkOfferRooms), [], checkOfferGuests), [], checkOfferFeatures));
   });
 
- 
 
   // Обработчик изменения формы
   mapFiltersForm.addEventListener('change', formChangeHandler);
