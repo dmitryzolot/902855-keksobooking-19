@@ -31,7 +31,6 @@
     mainForm.classList.remove('ad-form--disabled');
     // Передаём свойства объектов в функцию добавления пинов на карту
     window.backend.fetchData(window.renderAnnouncements);
-    // priceField.reset();
     priceField.placeholder = priceFieldDefaultPlaceholder;
     priceField.min = priceFieldDefaultPlaceholder;
   };
