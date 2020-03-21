@@ -5,6 +5,7 @@
   var mapBlock = document.querySelector('.map');
   var formFieldsets = document.querySelectorAll('.ad-form__element');
   var mainForm = document.querySelector('.ad-form');
+  var priceFieldDefaultPlaceholder = '1000';
 
   var mapOptionFilters = document.querySelectorAll('.map__filter');
   var mapCheckboxes = document.querySelectorAll('.map__checkbox');
@@ -30,7 +31,9 @@
     mainForm.classList.remove('ad-form--disabled');
     // Передаём свойства объектов в функцию добавления пинов на карту
     window.backend.fetchData(window.renderAnnouncements);
-    priceField.min = priceField.placeholder;
+    // priceField.reset();
+    priceField.placeholder = priceFieldDefaultPlaceholder;
+    priceField.min = priceFieldDefaultPlaceholder;
   };
 
   mainPin.addEventListener('keydown', function (evt) {
