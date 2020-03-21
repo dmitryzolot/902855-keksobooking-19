@@ -93,7 +93,7 @@
     // Закрытие попапа
     var popupClose = cardElement.querySelector('.popup__close');
     popupClose.addEventListener('click', removeCard);
-    // document.addEventListener('keydown', removeCard);
+
     document.addEventListener('keydown', onPopupEscPress);
     return cardElement;
 
