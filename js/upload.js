@@ -6,6 +6,8 @@
   var uploadMap = document.querySelector('.map');
   var mainForm = document.querySelector('.ad-form');
   var formFieldsets = document.querySelectorAll('.ad-form__element');
+  var guestsSelect = document.querySelector('#capacity');
+  var roomsSelect = document.querySelector('#room_number');
 
   // Форма фильтров
   var mapFiltersForm = document.querySelector('.map__filters');
@@ -81,7 +83,12 @@
     // Сброс значений форм
     mapFiltersForm.reset();
     adForm.reset();
+    formFieldsets.forEach(function (filter) {
+      filter.setAttribute('disabled', 'disabled');
+      guestsSelect.value = roomsSelect.value;
+      window.setRestrictions();
 
+    });
   };
 
 
@@ -90,6 +97,8 @@
     evt.preventDefault();
     window.backend.saveData(new FormData(adForm), onSuccess, window.data.onError);
     setPageInitialState();
+
+    window.setRestrictions();
   });
 
 

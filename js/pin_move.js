@@ -104,14 +104,20 @@
     // При отпускании кнопки мыши прекращаем слушать события движения мыши
     var mouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
-      window.activatePage();
       setAddressValue(parseInt(mainPin.style.left, 10) + Math.floor(pinSize.WIDTH / 2), parseInt(mainPin.style.top, 10) + pinSize.HEIGTH + MAIN_PIN_TIP_HEIGHT);
       document.removeEventListener('mousemove', mouseMoveHadler);
       document.removeEventListener('mouseup', mouseUpHandler);
 
     };
 
+    var mouseDownHandler = function (downEvt) {
+      downEvt.preventDefault();
+      window.activatePage();
+      document.removeEventListener('mousedown', mouseDownHandler);
+    };
+
     // Обработчики события передвижения мыши и отпускания кнопки мыши
+    document.addEventListener('mousedown', mouseDownHandler);
     document.addEventListener('mousemove', mouseMoveHadler);
     document.addEventListener('mouseup', mouseUpHandler);
   });

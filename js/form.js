@@ -2,24 +2,24 @@
 
 (function () {
 
-  var ROOMS_MAP = {
+  var RoomsMap = {
     1: ['0', '2', '3'],
     2: ['0', '3'],
     3: ['0'],
     100: ['1', '2', '3']
   };
 
-  var PROPERTY_TYPES_MAP = {
-    bungalo: '0',
-    flat: '1000',
-    house: '5000',
-    palace: '10000'
+  var PropertyTypesMap = {
+    BUNGALO: '0',
+    FLAT: '1000',
+    HOUSE: '5000',
+    PALACE: '10000'
   };
 
   var guestsSelect = document.querySelector('#capacity');
   var roomsSelect = document.querySelector('#room_number');
   var setRestrictions = function () {
-    var currentRestrictions = ROOMS_MAP[roomsSelect.value];
+    var currentRestrictions = RoomsMap[roomsSelect.value];
     var guestOptions = guestsSelect.options;
     [].forEach.call(guestOptions, function (option) {
       option.disabled = !(currentRestrictions.indexOf(option.value) === -1);
@@ -55,7 +55,9 @@
   var priceField = document.querySelector('#price');
 
   selectType.addEventListener('change', function () {
-    priceField.min = priceField.placeholder = PROPERTY_TYPES_MAP[selectType.value];
+    priceField.min = priceField.placeholder = PropertyTypesMap[selectType.value.toUpperCase()];
   });
+
+  window.setRestrictions = setRestrictions;
 
 })();

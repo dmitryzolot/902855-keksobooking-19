@@ -10,6 +10,7 @@
   var mapCheckboxes = document.querySelectorAll('.map__checkbox');
 
   var mainPin = document.querySelector('.map__pin--main');
+  var priceField = document.querySelector('#price');
 
   formFieldsets.forEach(function (filter) {
     filter.setAttribute('disabled', 'disabled');
@@ -29,7 +30,7 @@
     mainForm.classList.remove('ad-form--disabled');
     // Передаём свойства объектов в функцию добавления пинов на карту
     window.backend.fetchData(window.renderAnnouncements);
-
+    priceField.min = priceField.placeholder;
   };
 
   mainPin.addEventListener('keydown', function (evt) {

@@ -4,7 +4,8 @@
 
   var PINS_LIMIT = 5;
 
-  var price = {
+
+  var Price = {
     LOW: 10000,
     MIDDLE: {
       MIN: 10000,
@@ -33,13 +34,13 @@
     if (priceFilter.value === 'any') {
       return true;
     }
-    if (element.offer.price < price.LOW) {
+    if (element.offer.price < Price.LOW) {
       return priceFilter.value === 'low';
     }
-    if (element.offer.price >= price.MIDDLE.MIN && element.offer.price <= price.MIDDLE.MAX) {
+    if (element.offer.price >= Price.MIDDLE.MIN && element.offer.price <= Price.MIDDLE.MAX) {
       return priceFilter.value === 'middle';
     }
-    if (element.offer.price > price.HIGH) {
+    if (element.offer.price > Price.HIGH) {
       return priceFilter.value === 'high';
     }
 
@@ -88,7 +89,7 @@
   };
 
   // Обработчик события изменения формы
-  var formChangeHandler = window.debounce.setInterval(function () {
+  var formChangeHandler = window.debounce.setupInterval(function () {
 
     // Удаление несоответсвующих фильтру пинов (кроме главного пина)
     window.similarOffer.mapPins.querySelectorAll('.map__pin:not(.map__pin--main)').forEach(function (element) {
@@ -99,7 +100,17 @@
     window.similarOffer.tryRemoveCard();
 
     // Фильтрация массива
-    window.similarOffer.renderPins(filterData(filterData(filterData(filterData(filterData(window.offersArray, [], checkOfferType), [], checkOfferPrice), [], checkOfferRooms), [], checkOfferGuests), [], checkOfferFeatures));
+    window.similarOffer.renderPins(
+        filterData(
+            filterData(
+                filterData(
+                    filterData(
+                        filterData(window.announcements, [], checkOfferType),
+                        [], checkOfferPrice),
+                    [], checkOfferRooms),
+                [], checkOfferGuests),
+            [], checkOfferFeatures)
+    );
   });
 
 

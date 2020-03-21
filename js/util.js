@@ -24,7 +24,8 @@
     },
 
     getRandomElement: function (array) {
-      var random = Math.floor(Math.random() * array.length); return array[random];
+      var random = Math.floor(Math.random() * array.length);
+      return array[random];
     },
 
     getRandomInteger: function (min, max) {

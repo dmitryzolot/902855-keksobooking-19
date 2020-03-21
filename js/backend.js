@@ -2,6 +2,9 @@
 
 (function () {
 
+  var FETCH_URL = 'https://js.dump.academy/keksobooking/data';
+  var UPLOAD_URL = 'https://js.dump.academy/keksobooking';
+
   // Функция показа и закрытия сообщения об ошибке
   var onError = function (message) {
 
@@ -26,7 +29,7 @@
     };
 
     var errorButtonKeydownHandler = function (evt) {
-      if (evt.keycode === window.Uint8ClampedArray.ESC_KEYCODE) {
+      if (evt.keycode === window.ESC_KEYCODE) {
         mainWindow.removeChild(errorTemplate);
         window.upload.setPageInitialState();
 
@@ -42,7 +45,6 @@
 
   var fetchData = function (onSuccess) {
 
-    var URL = 'https://js.dump.academy/keksobooking/data';
 
     var xhr = new XMLHttpRequest();
 
@@ -66,7 +68,7 @@
     });
 
 
-    xhr.open('GET', URL);
+    xhr.open('GET', FETCH_URL);
 
     xhr.send();
   };
@@ -76,7 +78,6 @@
   var saveData = function (data, onSuccess) {
 
     // URL-адрес сервера для отправки данных
-    var URL = 'https://js.dump.academy/keksobooking';
 
     // Создаём запрос на сервер
     var xhr = new XMLHttpRequest();
@@ -98,7 +99,7 @@
     });
 
     // Как и куда мы хотим обратиться
-    xhr.open('POST', URL);
+    xhr.open('POST', UPLOAD_URL);
     xhr.send(data);
   };
 

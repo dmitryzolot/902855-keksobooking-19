@@ -46,11 +46,11 @@
     return pinElement;
   };
 
-  window.offersArray = [];
+  window.announcements = [];
 
   window.renderAnnouncements = function (serverData) {
 
-    window.offersArray = serverData;
+    window.announcements = serverData;
 
     // Создаем фрагмент
     var fragment = document.createDocumentFragment();
@@ -58,9 +58,10 @@
     // Вызываем функцию добавления свойств объектов в элементы шаблона и записываем её в фрагмент
     for (var i = 0; i < 6; i++) {
       // Добавляем фрагмент на карту
+      fragment.appendChild(createTemplatePin(serverData[i]));
+
       mapPins.appendChild(fragment);
 
-      fragment.appendChild(createTemplatePin(serverData[i]));
     }
   };
 

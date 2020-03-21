@@ -23,13 +23,24 @@
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
   // Функция удаления карточки
+
+
   var removeCard = function () {
     var popupElement = document.querySelector('.popup');
 
     if (popupElement) {
       popupElement.parentNode.removeChild(popupElement);
     }
+
   };
+
+  var onPopupEscPress = function (evt) {
+    if (evt.keyCode === window.util.ESC_KEYCODE) {
+      removeCard();
+      document.removeEventListener('keydown', onPopupEscPress);
+    }
+  };
+
 
   // Функция добавления фото
   var addPhotos = function (tagName, imgSrc, className, width, height, alt) {
@@ -82,11 +93,8 @@
     // Закрытие попапа
     var popupClose = cardElement.querySelector('.popup__close');
     popupClose.addEventListener('click', removeCard);
-    document.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.util.ESC_KEYCODE) {
-        removeCard();
-      }
-    });
+    // document.addEventListener('keydown', removeCard);
+    document.addEventListener('keydown', onPopupEscPress);
     return cardElement;
 
   };
